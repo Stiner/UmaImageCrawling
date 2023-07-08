@@ -7,7 +7,7 @@ import time
 char_image_list = []
 
 uma_list_url = "https://umamusume.jp/character"
-download_dir = "./build/"
+download_dir = "./downloads/"
 
 options = webdriver.EdgeOptions()
 options.add_argument("headless")
