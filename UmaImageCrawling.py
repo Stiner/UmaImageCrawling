@@ -28,6 +28,8 @@ def run_download():
 
     print("Total:" + str(total_count))
 
+    logfile = open(os.path.join(download_dir, "_download_list.txt"), "w", encoding="UTF-8")
+
     for i in range(0, total_count):
         last_height = driver.execute_script("return document.body.scrollHeight")
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
@@ -56,7 +58,10 @@ def run_download():
             char_name_jp = str(element_img.get_attribute("alt")).replace("<small>", "").replace("</small>", "").replace("<br>", " ")
             image_url = str(element_img.get_attribute("src"))
 
-            print("{:02}/{:02}-{:02}/{:02}|{}|{}|{}".format(i + 1, total_count, j + 1, image_count, char_name_en, char_name_jp, image_url))
+            log = "{:02}/{:02}-{:02}/{:02}|{}|{}|{}".format(i + 1, total_count, j + 1, image_count, char_name_en, char_name_jp, image_url)
+            print(log)
+
+            logfile.write(log + "\n")
 
             char_image_list.append({ char_name_en, char_name_jp, image_url })
 
@@ -64,8 +69,12 @@ def run_download():
             file_name = "{:02}-{:02}_{}_{}{}".format(i + 1, j + 1, char_name_en, char_name_jp, file_ext)
             urlretrieve(image_url, os.path.join(download_dir, file_name))
 
+        logfile.flush()
+
         driver.back()
         time.sleep(2)
+
+    logfile.close()
 
     driver.close()
 
